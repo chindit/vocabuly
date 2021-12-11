@@ -17,25 +17,14 @@ class IndexController extends AbstractController
     public function index(Security $security): Response
     {
         if ($security->getUser()) {
-            return $this->forward('App\\Controller\\IndexController::loggedIndex');
+            return $this->forward('App\\Controller\\IndexController::dashboard');
         }
         return $this->render('index/index.html.twig');
     }
 
-    #[Route('/i', name: 'lindex')]
-    public function loggedIndex(Request $request, Security $security, EntityManagerInterface $entityManager): Response
+    #[Route('/my/dashboard', name: 'dashboard')]
+    public function dashboard(): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        $vocable = new Vocable();
-        $vocableForm = $this->createForm(VocableType::class, $vocable);
-        $vocableForm->handleRequest($request);
-        if ($vocableForm->isSubmitted() && $vocableForm->isValid()) {
-            $vocable->setUser($security->getUser());
-            $entityManager->persist($vocable);
-            $entityManager->flush();
-        }
-
-        return $this->render('index/vocable.html.twig', ['form' => $vocableForm->createView()]);
+        return $this->render('index/dashboard.html.twig');
     }
 }
