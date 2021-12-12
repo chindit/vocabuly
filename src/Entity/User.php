@@ -45,9 +45,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $vocables;
 
+    /**
+     * @ORM\OneToMany(targetEntity=LearningSession::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $learningSessions;
+
     public function __construct()
     {
         $this->vocables = new ArrayCollection();
+        $this->learningSessions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -144,6 +150,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($vocable->getUser() === $this) {
                 $vocable->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|LearningSession[]
+     */
+    public function getLearningSessions(): Collection
+    {
+        return $this->learningSessions;
+    }
+
+    public function addLearningSession(LearningSession $learningSession): self
+    {
+        if (!$this->learningSessions->contains($learningSession)) {
+            $this->learningSessions[] = $learningSession;
+            $learningSession->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLearningSession(LearningSession $learningSession): self
+    {
+        if ($this->learningSessions->removeElement($learningSession)) {
+            // set the owning side to null (unless already changed)
+            if ($learningSession->getUser() === $this) {
+                $learningSession->setUser(null);
             }
         }
 

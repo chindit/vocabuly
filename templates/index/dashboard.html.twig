@@ -3,9 +3,19 @@
 {% block title %}Hello IndexController!{% endblock %}
 
 {% block body %}
-    <h1>Login</h1>
-    <p><a href="{{ url('app_login') }}">Login</a></p>
-
-    <h1>Register</h1>
-    <p><a href="{{ url('app_register') }}">Register</a></p>
+    <h1 class="pb-3">Mon apprentissage</h1>
+    {% for session in sessions %}
+        <h3>J'apprends le <img class="valign-bottom" src="/img/flags/{{ session.language.iso }}.png" alt="{{ session.language.name }}" />&nbsp;{{ session.language.name }}</h3>
+    {% endfor %}
+    <ul>
+        <li>J'ai {{ stats.0.count }} mots enregistrés</li>
+        <li>Je connais {{ stats.0.knowledgeIn*100 }}% des mots du {{ sessions.first.language.name }} vers le français</li>
+        <li>Je connais {{ stats.0.knowledgeOut*100 }}% des mots du français vers le {{ sessions.first.language.name }}</li>
+    </ul>
+    <p>
+        <a href="{{ url('add_vocable') }}" class="btn btn-info">Ajouter un nouveau mot</a>
+    </p>
+    <p>
+        <a href="#" class="btn btn-primary">Réviser mon vocabulaire</a>
+    </p>
 {% endblock %}

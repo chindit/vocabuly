@@ -2,14 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Vocable;
-use App\Form\VocableType;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\User;
+use App\Repository\VocableRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class IndexController extends AbstractController
 {
@@ -23,8 +22,15 @@ class IndexController extends AbstractController
     }
 
     #[Route('/my/dashboard', name: 'dashboard')]
-    public function dashboard(): Response
+    public function dashboard(#[CurrentUser]User $user, VocableRepository $vocableRepository): Response
     {
-        return $this->render('index/dashboard.html.twig');
+		if ($user->getLearningSessions()->isEmpty()) {
+			return $this->forward('App\\Controller\\LearningController::createLearning');
+		}
+dump($vocableRepository->getStatistics($user, $user->getLearningSessions()->first()));
+        return $this->render('index/dashboard.html.twig', [
+			'sessions' => $user->getLearningSessions(),
+			'stats' => $vocableRepository->getStatistics($user, $user->getLearningSessions()->first()),
+        ]);
     }
 }

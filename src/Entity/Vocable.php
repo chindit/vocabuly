@@ -33,6 +33,21 @@ class Vocable
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=LearningSession::class, inversedBy="vocables")
+     */
+    private $session;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $knowledgeIn = 0.0;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $knowledgeOut = 0.0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +85,42 @@ class Vocable
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getSession(): ?LearningSession
+    {
+        return $this->session;
+    }
+
+    public function setSession(?LearningSession $session): self
+    {
+        $this->session = $session;
+
+        return $this;
+    }
+
+    public function getKnowledgeIn(): ?float
+    {
+        return $this->knowledgeIn;
+    }
+
+    public function setKnowledgeIn(float $knowledgeIn): self
+    {
+        $this->knowledgeIn = $knowledgeIn;
+
+        return $this;
+    }
+
+    public function getKnowledgeOut(): ?float
+    {
+        return $this->knowledgeOut;
+    }
+
+    public function setKnowledgeOut(float $knowledgeOut): self
+    {
+        $this->knowledgeOut = $knowledgeOut;
 
         return $this;
     }

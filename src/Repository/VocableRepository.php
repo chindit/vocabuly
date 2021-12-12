@@ -2,6 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Language;
+use App\Entity\LearningSession;
+use App\Entity\User;
 use App\Entity\Vocable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -18,6 +21,18 @@ class VocableRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Vocable::class);
     }
+
+	public function getStatistics(User $user, LearningSession $session)
+	{
+		return $this->createQueryBuilder('v')
+			->select('COUNT(v.id) AS count, AVG(v.knowledgeIn) AS knowledgeIn, AVG(v.knowledgeOut) AS knowledgeOut')
+			->where('v.user = :user')
+			->andWhere('v.session = :session')
+			->setParameter('user', $user)
+			->setParameter('session', $session)
+			->getQuery()
+			->getScalarResult();
+	}
 
     // /**
     //  * @return Vocable[] Returns an array of Vocable objects
