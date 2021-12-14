@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\LearningSession;
+use App\Entity\LearningLanguage;
 use App\Entity\User;
 use App\Form\LearningType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,7 +26,7 @@ class LearningController extends AbstractController
 	#[Route('/my/learnings/create', name: 'learning_create')]
 	public function createLearning(#[CurrentUser]User $user, Request $request, EntityManagerInterface $entityManager): Response
 	{
-		$learning = new LearningSession();
+		$learning = new LearningLanguage();
 		$learningForm = $this->createForm(LearningType::class, $learning);
 		$learningForm->handleRequest($request);
 		if ($learningForm->isSubmitted() && $learningForm->isValid()) {

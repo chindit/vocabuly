@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Language;
-use App\Entity\LearningSession;
+use App\Entity\LearningLanguage;
 use App\Entity\User;
 use App\Entity\Vocable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -22,7 +22,7 @@ class VocableRepository extends ServiceEntityRepository
         parent::__construct($registry, Vocable::class);
     }
 
-	public function getStatistics(User $user, LearningSession $session)
+	public function getStatistics(User $user, LearningLanguage $session)
 	{
 		return $this->createQueryBuilder('v')
 			->select('COUNT(v.id) AS count, AVG(v.knowledgeIn) AS knowledgeIn, AVG(v.knowledgeOut) AS knowledgeOut')

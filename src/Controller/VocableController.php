@@ -23,7 +23,7 @@ class VocableController extends AbstractController
         $vocableForm->handleRequest($request);
         if ($vocableForm->isSubmitted() && $vocableForm->isValid()) {
             $vocable->setUser($user);
-			$vocable->setSession($user->getLearningSessions()->first());
+			$vocable->setSession($user->getLearningLanguages()->first());
             $entityManager->persist($vocable);
             $entityManager->flush();
         }

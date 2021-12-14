@@ -24,13 +24,13 @@ class IndexController extends AbstractController
     #[Route('/my/dashboard', name: 'dashboard')]
     public function dashboard(#[CurrentUser]User $user, VocableRepository $vocableRepository): Response
     {
-		if ($user->getLearningSessions()->isEmpty()) {
+		if ($user->getLearningLanguages()->isEmpty()) {
 			return $this->forward('App\\Controller\\LearningController::createLearning');
 		}
-dump($vocableRepository->getStatistics($user, $user->getLearningSessions()->first()));
+dump($vocableRepository->getStatistics($user, $user->getLearningLanguages()->first()));
         return $this->render('index/dashboard.html.twig', [
-			'sessions' => $user->getLearningSessions(),
-			'stats' => $vocableRepository->getStatistics($user, $user->getLearningSessions()->first()),
+			'sessions' => $user->getLearningLanguages(),
+			'stats' => $vocableRepository->getStatistics($user, $user->getLearningLanguages()->first()),
         ]);
     }
 }

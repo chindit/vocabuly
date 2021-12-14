@@ -34,7 +34,7 @@ class Vocable
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity=LearningSession::class, inversedBy="vocables")
+     * @ORM\ManyToOne(targetEntity=LearningLanguage::class, inversedBy="vocables")
      */
     private $session;
 
@@ -89,12 +89,12 @@ class Vocable
         return $this;
     }
 
-    public function getSession(): ?LearningSession
+    public function getSession(): ?LearningLanguage
     {
         return $this->session;
     }
 
-    public function setSession(?LearningSession $session): self
+    public function setSession(?LearningLanguage $session): self
     {
         $this->session = $session;
 

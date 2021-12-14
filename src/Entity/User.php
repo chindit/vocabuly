@@ -46,14 +46,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $vocables;
 
     /**
-     * @ORM\OneToMany(targetEntity=LearningSession::class, mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=LearningLanguage::class, mappedBy="user", orphanRemoval=true)
      */
-    private $learningSessions;
+    private $learningLanguages;
 
     public function __construct()
     {
         $this->vocables = new ArrayCollection();
-        $this->learningSessions = new ArrayCollection();
+        $this->learningLanguages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -157,26 +157,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|LearningSession[]
+     * @return Collection|LearningLanguage[]
      */
-    public function getLearningSessions(): Collection
+    public function getLearningLanguages(): Collection
     {
-        return $this->learningSessions;
+        return $this->learningLanguages;
     }
 
-    public function addLearningSession(LearningSession $learningSession): self
+    public function addLearningLanguage(LearningLanguage $learningSession): self
     {
-        if (!$this->learningSessions->contains($learningSession)) {
-            $this->learningSessions[] = $learningSession;
+        if (!$this->learningLanguages->contains($learningSession)) {
+            $this->learningLanguages[] = $learningSession;
             $learningSession->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeLearningSession(LearningSession $learningSession): self
+    public function removeLearningLanguage(LearningLanguage $learningSession): self
     {
-        if ($this->learningSessions->removeElement($learningSession)) {
+        if ($this->learningLanguages->removeElement($learningSession)) {
             // set the owning side to null (unless already changed)
             if ($learningSession->getUser() === $this) {
                 $learningSession->setUser(null);

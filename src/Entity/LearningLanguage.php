@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\LearningSessionRepository;
+use App\Repository\LearningLanguageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=LearningSessionRepository::class)
+ * @ORM\Entity(repositoryClass=LearningLanguageRepository::class)
  */
-class LearningSession
+class LearningLanguage
 {
     /**
      * @ORM\Id

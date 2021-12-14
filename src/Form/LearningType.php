@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Language;
-use App\Entity\LearningSession;
+use App\Entity\LearningLanguage;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -26,7 +26,7 @@ class LearningType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => LearningSession::class,
+            'data_class' => LearningLanguage::class,
         ]);
     }
 }
