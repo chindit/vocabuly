@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class VocableController extends AbstractController
 {
     #[Route('/my/vocable/add', name: 'add_vocable')]
-    public function addWord(#[CurrentUser]User $user, Request $request, Security $security, EntityManagerInterface $entityManager): Response
+    public function addWord(#[CurrentUser]User $user, Request $request, EntityManagerInterface $entityManager): Response
     {
 		if (!$user->getLearningLanguages()->first())
 		{
@@ -30,6 +30,11 @@ class VocableController extends AbstractController
 			$vocable->setLearningLanguage($user->getLearningLanguages()->first());
             $entityManager->persist($vocable);
             $entityManager->flush();
+
+            $this->addFlash('info', 'Mot correctement ajouté');
+            // Reset form
+            $vocable = new Vocable();
+            $vocableForm = $this->createForm(VocableType::class, $vocable);
         }
 
         return $this->render('index/vocable.html.twig', ['form' => $vocableForm->createView()]);
