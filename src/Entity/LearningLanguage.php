@@ -20,7 +20,7 @@ class LearningLanguage
     private int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="learningSessions")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="learningLanguage")
      * @ORM\JoinColumn(nullable=false)
      */
     private User $user;
@@ -37,7 +37,7 @@ class LearningLanguage
     private \DateTimeImmutable $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Vocable::class, mappedBy="session")
+     * @ORM\OneToMany(targetEntity=Vocable::class, mappedBy="learningLanguage")
      * @var Collection<int, Vocable> $vocables
      */
     private Collection $vocables;
