@@ -11,6 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method LearningLanguage|null findOneBy(array $criteria, array $orderBy = null)
  * @method LearningLanguage[]    findAll()
  * @method LearningLanguage[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<LearningLanguage>
  */
 class LearningLanguageRepository extends ServiceEntityRepository
 {

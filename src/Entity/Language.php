@@ -15,24 +15,24 @@ class Language
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=3)
      */
-    private $iso;
+    private string $iso;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private string $name;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getIso(): ?string
+    public function getIso(): string
     {
         return $this->iso;
     }
@@ -44,7 +44,7 @@ class Language
         return $this;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }

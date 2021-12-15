@@ -18,12 +18,16 @@ class VocableController extends AbstractController
     #[Route('/my/vocable/add', name: 'add_vocable')]
     public function addWord(#[CurrentUser]User $user, Request $request, Security $security, EntityManagerInterface $entityManager): Response
     {
+		if (!$user->getLearningLanguages()->first())
+		{
+			return $this->redirect('learning_create');
+		}
         $vocable = new Vocable();
         $vocableForm = $this->createForm(VocableType::class, $vocable);
         $vocableForm->handleRequest($request);
         if ($vocableForm->isSubmitted() && $vocableForm->isValid()) {
             $vocable->setUser($user);
-			$vocable->setSession($user->getLearningLanguages()->first());
+			$vocable->setLearningLanguage($user->getLearningLanguages()->first());
             $entityManager->persist($vocable);
             $entityManager->flush();
         }

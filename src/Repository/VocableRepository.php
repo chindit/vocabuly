@@ -14,6 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Vocable|null findOneBy(array $criteria, array $orderBy = null)
  * @method Vocable[]    findAll()
  * @method Vocable[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Vocable>
  */
 class VocableRepository extends ServiceEntityRepository
 {
@@ -22,14 +23,17 @@ class VocableRepository extends ServiceEntityRepository
         parent::__construct($registry, Vocable::class);
     }
 
-	public function getStatistics(User $user, LearningLanguage $session)
+	/**
+	 * @return array<string, mixed>
+	 */
+	public function getStatistics(User $user, LearningLanguage $language): array
 	{
 		return $this->createQueryBuilder('v')
 			->select('COUNT(v.id) AS count, AVG(v.knowledgeIn) AS knowledgeIn, AVG(v.knowledgeOut) AS knowledgeOut')
 			->where('v.user = :user')
-			->andWhere('v.session = :session')
+			->andWhere('v.learningLanguage = :language')
 			->setParameter('user', $user)
-			->setParameter('session', $session)
+			->setParameter('language', $language)
 			->getQuery()
 			->getScalarResult();
 	}

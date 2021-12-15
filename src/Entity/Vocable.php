@@ -15,45 +15,46 @@ class Vocable
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $original;
+    private string $original;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $translation;
+    private string $translation;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="vocables")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user;
+    private User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=LearningLanguage::class, inversedBy="vocables")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $session;
+    private LearningLanguage $learningLanguage;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $knowledgeIn = 0.0;
+    private float $knowledgeIn = 0.0;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $knowledgeOut = 0.0;
+    private float $knowledgeOut = 0.0;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getOriginal(): ?string
+    public function getOriginal(): string
     {
         return $this->original;
     }
@@ -65,7 +66,7 @@ class Vocable
         return $this;
     }
 
-    public function getTranslation(): ?string
+    public function getTranslation(): string
     {
         return $this->translation;
     }
@@ -77,31 +78,31 @@ class Vocable
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getSession(): ?LearningLanguage
+    public function getLearningLanguage(): LearningLanguage
     {
-        return $this->session;
+        return $this->learningLanguage;
     }
 
-    public function setSession(?LearningLanguage $session): self
+    public function setLearningLanguage(LearningLanguage $learningLanguage): self
     {
-        $this->session = $session;
+        $this->learningLanguage = $learningLanguage;
 
         return $this;
     }
 
-    public function getKnowledgeIn(): ?float
+    public function getKnowledgeIn(): float
     {
         return $this->knowledgeIn;
     }
@@ -113,7 +114,7 @@ class Vocable
         return $this;
     }
 
-    public function getKnowledgeOut(): ?float
+    public function getKnowledgeOut(): float
     {
         return $this->knowledgeOut;
     }

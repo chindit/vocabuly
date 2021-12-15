@@ -22,33 +22,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $email;
+    private string $email;
 
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private string $password;
 
     /**
      * @ORM\OneToMany(targetEntity=Vocable::class, mappedBy="user", orphanRemoval=true)
+     * @var Collection<int, Vocable> $vocables
      */
-    private $vocables;
+    private Collection $vocables;
 
     /**
      * @ORM\OneToMany(targetEntity=LearningLanguage::class, mappedBy="user", orphanRemoval=true)
+     * @var Collection<int, LearningLanguage> $learningLanguages
      */
-    private $learningLanguages;
+    private Collection $learningLanguages;
 
     public function __construct()
     {
@@ -56,12 +58,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->learningLanguages = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -127,7 +129,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|Vocable[]
+     * @return Collection<int, Vocable>
      */
     public function getVocables(): Collection
     {
@@ -157,7 +159,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|LearningLanguage[]
+     * @return Collection<int, LearningLanguage>
      */
     public function getLearningLanguages(): Collection
     {

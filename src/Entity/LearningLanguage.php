@@ -17,66 +17,67 @@ class LearningLanguage
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="learningSessions")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user;
+    private User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Language::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $language;
+    private Language $language;
 
     /**
      * @ORM\Column(type="datetime_immutable")
      */
-    private $createdAt;
+    private \DateTimeImmutable $createdAt;
 
     /**
      * @ORM\OneToMany(targetEntity=Vocable::class, mappedBy="session")
+     * @var Collection<int, Vocable> $vocables
      */
-    private $vocables;
+    private Collection $vocables;
 
 	public function __construct()
-                     	{
-                     		$this->createdAt = new \DateTimeImmutable();
-                       $this->vocables = new ArrayCollection();
-                     	}
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->vocables = new ArrayCollection();
+    }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getUser(): ?User
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getLanguage(): ?Language
+    public function getLanguage(): Language
     {
         return $this->language;
     }
 
-    public function setLanguage(?Language $language): self
+    public function setLanguage(Language $language): self
     {
         $this->language = $language;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -89,7 +90,7 @@ class LearningLanguage
     }
 
     /**
-     * @return Collection|Vocable[]
+     * @return Collection<int, Vocable>
      */
     public function getVocables(): Collection
     {
@@ -100,7 +101,7 @@ class LearningLanguage
     {
         if (!$this->vocables->contains($vocable)) {
             $this->vocables[] = $vocable;
-            $vocable->setSession($this);
+            $vocable->setLearningLanguage($this);
         }
 
         return $this;
@@ -110,8 +111,8 @@ class LearningLanguage
     {
         if ($this->vocables->removeElement($vocable)) {
             // set the owning side to null (unless already changed)
-            if ($vocable->getSession() === $this) {
-                $vocable->setSession(null);
+            if ($vocable->getLearningLanguage() === $this) {
+                $vocable->setLearningLanguage(null);
             }
         }
 
