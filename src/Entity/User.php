@@ -52,10 +52,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private Collection $learningLanguages;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TestExercise::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $testExercises;
+
     public function __construct()
     {
         $this->vocables = new ArrayCollection();
         $this->learningLanguages = new ArrayCollection();
+        $this->testExercises = new ArrayCollection();
     }
 
     public function getId(): int
@@ -182,6 +188,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($learningSession->getUser() === $this) {
                 $learningSession->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TestExercise[]
+     */
+    public function getTestExercises(): Collection
+    {
+        return $this->testExercises;
+    }
+
+    public function addTestExercise(TestExercise $testExercise): self
+    {
+        if (!$this->testExercises->contains($testExercise)) {
+            $this->testExercises[] = $testExercise;
+            $testExercise->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTestExercise(TestExercise $testExercise): self
+    {
+        if ($this->testExercises->removeElement($testExercise)) {
+            // set the owning side to null (unless already changed)
+            if ($testExercise->getUser() === $this) {
+                $testExercise->setUser(null);
             }
         }
 
