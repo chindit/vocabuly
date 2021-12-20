@@ -16,10 +16,10 @@ class LearningType extends AbstractType
     {
         $builder
             ->add('language', EntityType::class, [
-				'class' => Language::class,
-				'choice_label' => 'name',
+                'class' => Language::class,
+                'choice_label' => 'name',
             ])
-	        ->add('submit', SubmitType::class)
+            ->add('submit', SubmitType::class)
         ;
     }
 

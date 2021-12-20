@@ -15,36 +15,36 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-	#[ORM\Id]
-	#[ORM\GeneratedValue]
-	#[ORM\Column(type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-	#[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private string $email;
 
     /**
      * @var string[]
      */
-	#[ORM\Column(type: 'json')]
+    #[ORM\Column(type: 'json')]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
-	#[ORM\Column(type: 'string')]
+    #[ORM\Column(type: 'string')]
     private string $password;
 
     /**
      * @var Collection<int, Vocable> $vocables
      */
-	#[ORM\OneToMany(targetEntity: Vocable::class, mappedBy: 'user', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Vocable::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $vocables;
 
     /**
      * @var Collection<int, LearningLanguage> $learningLanguages
      */
-	#[ORM\OneToMany(targetEntity: LearningLanguage::class, mappedBy: 'user', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: LearningLanguage::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $learningLanguages;
 
     /**
@@ -83,7 +83,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -98,9 +98,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-	/**
-	 * @param string[] $roles
-	 */
+    /**
+     * @param string[] $roles
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;

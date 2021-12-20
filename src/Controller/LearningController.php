@@ -17,28 +17,28 @@ class LearningController extends AbstractController
     #[Route('/my/learnings', name: 'learnings')]
     public function index(): Response
     {
-		// TODO
+        // TODO
         return $this->render('learning/index.html.twig', [
             'controller_name' => 'LearningController',
         ]);
     }
 
-	#[Route('/my/learnings/create', name: 'learning_create')]
-	public function createLearning(#[CurrentUser]User $user, Request $request, EntityManagerInterface $entityManager): Response
-	{
-		$learning = new LearningLanguage();
-		$learningForm = $this->createForm(LearningType::class, $learning);
-		$learningForm->handleRequest($request);
-		if ($learningForm->isSubmitted() && $learningForm->isValid()) {
-			$learning->setUser($user);
-			$entityManager->persist($learning);
-			$entityManager->flush();
+    #[Route('/my/learnings/create', name: 'learning_create')]
+    public function createLearning(#[CurrentUser] User $user, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $learning = new LearningLanguage();
+        $learningForm = $this->createForm(LearningType::class, $learning);
+        $learningForm->handleRequest($request);
+        if ($learningForm->isSubmitted() && $learningForm->isValid()) {
+            $learning->setUser($user);
+            $entityManager->persist($learning);
+            $entityManager->flush();
 
-			return $this->redirectToRoute('dashboard');
-		}
+            return $this->redirectToRoute('dashboard');
+        }
 
-		return $this->render('learning/create.html.twig', [
-			'form' => $learningForm->createView()
-		]);
-	}
+        return $this->render('learning/create.html.twig', [
+            'form' => $learningForm->createView(),
+        ]);
+    }
 }

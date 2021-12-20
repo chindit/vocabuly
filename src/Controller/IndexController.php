@@ -18,19 +18,20 @@ class IndexController extends AbstractController
         if ($security->getUser()) {
             return $this->forward('App\\Controller\\IndexController::dashboard');
         }
+
         return $this->render('index/index.html.twig');
     }
 
     #[Route('/my/dashboard', name: 'dashboard')]
-    public function dashboard(#[CurrentUser]User $user, VocableRepository $vocableRepository): Response
+    public function dashboard(#[CurrentUser] User $user, VocableRepository $vocableRepository): Response
     {
-		if ($user->getLearningLanguages()->isEmpty()) {
-			return $this->forward('App\\Controller\\LearningController::createLearning');
-		}
-dump($vocableRepository->getStatistics($user, $user->getLearningLanguages()->first()));
+        if ($user->getLearningLanguages()->isEmpty()) {
+            return $this->forward('App\\Controller\\LearningController::createLearning');
+        }
+
         return $this->render('index/dashboard.html.twig', [
-			'sessions' => $user->getLearningLanguages(),
-			'stats' => $vocableRepository->getStatistics($user, $user->getLearningLanguages()->first()),
+            'sessions' => $user->getLearningLanguages(),
+            'stats' => $vocableRepository->getStatistics($user, $user->getLearningLanguages()->first()),
         ]);
     }
 }

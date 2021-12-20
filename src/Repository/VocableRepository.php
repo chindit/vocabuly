@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Language;
 use App\Entity\LearningLanguage;
 use App\Entity\User;
 use App\Entity\Vocable;
@@ -23,20 +22,20 @@ class VocableRepository extends ServiceEntityRepository
         parent::__construct($registry, Vocable::class);
     }
 
-	/**
-	 * @return array<string, mixed>
-	 */
-	public function getStatistics(User $user, LearningLanguage $language): array
-	{
-		return $this->createQueryBuilder('v')
-			->select('COUNT(v.id) AS count, AVG(v.knowledgeIn) AS knowledgeIn, AVG(v.knowledgeOut) AS knowledgeOut')
-			->where('v.user = :user')
-			->andWhere('v.learningLanguage = :language')
-			->setParameter('user', $user)
-			->setParameter('language', $language)
-			->getQuery()
-			->getScalarResult();
-	}
+    /**
+     * @return array<string, mixed>
+     */
+    public function getStatistics(User $user, LearningLanguage $language): array
+    {
+        return $this->createQueryBuilder('v')
+            ->select('COUNT(v.id) AS count, AVG(v.knowledgeIn) AS knowledgeIn, AVG(v.knowledgeOut) AS knowledgeOut')
+            ->where('v.user = :user')
+            ->andWhere('v.learningLanguage = :language')
+            ->setParameter('user', $user)
+            ->setParameter('language', $language)
+            ->getQuery()
+            ->getScalarResult();
+    }
 
     // /**
     //  * @return Vocable[] Returns an array of Vocable objects

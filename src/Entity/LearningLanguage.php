@@ -7,32 +7,32 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass:LearningLanguageRepository::class)]
+#[ORM\Entity(repositoryClass: LearningLanguageRepository::class)]
 class LearningLanguage
 {
-	#[ORM\Id]
-	#[ORM\GeneratedValue]
-	#[ORM\Column(type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'learningLangage')]
-	#[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'learningLangage')]
+    #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
-	#[ORM\ManyToOne(targetEntity: Language::class)]
-	#[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Language::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private Language $language;
 
-	#[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
     /**
      * @var Collection<int, Vocable> $vocables
      */
-	#[ORM\OneToMany(targetEntity: Vocable::class, mappedBy: 'learningLanguage')]
+    #[ORM\OneToMany(targetEntity: Vocable::class, mappedBy: 'learningLanguage')]
     private Collection $vocables;
 
-	public function __construct()
+    public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->vocables = new ArrayCollection();
