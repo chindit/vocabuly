@@ -2,5 +2,10 @@
 
 {% block body %}
     <h1 class="pb-3">Ajouter un nouveau terme</h1>
-{{ form(form) }}
+    {% for message in app.flashes('info') %}
+        <div class="alert alert-info" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {{ form(form) }}
 {% endblock %}

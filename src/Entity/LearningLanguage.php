@@ -15,7 +15,7 @@ class LearningLanguage
 	#[ORM\Column(type: 'integer')]
     private int $id;
 
-	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'learningSessions')]
+	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'learningLangage')]
 	#[ORM\JoinColumn(nullable: false)]
     private User $user;
 
@@ -29,7 +29,7 @@ class LearningLanguage
     /**
      * @var Collection<int, Vocable> $vocables
      */
-	#[ORM\OneToMany(targetEntity: Vocable::class, mappedBy: 'session')]
+	#[ORM\OneToMany(targetEntity: Vocable::class, mappedBy: 'learningLanguage')]
     private Collection $vocables;
 
 	public function __construct()
