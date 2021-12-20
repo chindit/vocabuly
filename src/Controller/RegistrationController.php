@@ -39,7 +39,7 @@ class RegistrationController extends AbstractController
                 $user,
                 $authenticator,
                 $request
-            );
+            ) ?? $this->redirectToRoute('dashboard');
         }
 
         return $this->render('registration/register.html.twig', [

@@ -5,48 +5,32 @@ namespace App\Entity;
 use App\Repository\VocableRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=VocableRepository::class)
- */
+#[ORM\Entity(repositoryClass: VocableRepository::class)]
 class Vocable
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+	#[ORM\Column(type: 'string', length: 255)]
     private string $original;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+	#[ORM\Column(type: 'string', length: 255)]
     private string $translation;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="vocables")
-     * @ORM\JoinColumn(nullable=false)
-     */
+	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'vocables')]
+	#[ORM\JoinColumn(nullable: false)]
     private User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=LearningLanguage::class, inversedBy="vocables")
-     * @ORM\JoinColumn(nullable=false)
-     */
+	#[ORM\ManyToOne(targetEntity: LearningLanguage::class, inversedBy: 'vocables')]
+	#[ORM\JoinColumn(nullable: false)]
     private LearningLanguage $learningLanguage;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+	#[ORM\Column(type: 'float')]
     private float $knowledgeIn = 0.0;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+	#[ORM\Column(type: 'float')]
     private float $knowledgeOut = 0.0;
 
     public function getId(): int

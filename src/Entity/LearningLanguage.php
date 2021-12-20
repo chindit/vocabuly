@@ -7,39 +7,29 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=LearningLanguageRepository::class)
- */
+#[ORM\Entity(repositoryClass:LearningLanguageRepository::class)]
 class LearningLanguage
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="learningSessions")
-     * @ORM\JoinColumn(nullable=false)
-     */
+	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'learningSessions')]
+	#[ORM\JoinColumn(nullable: false)]
     private User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Language::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+	#[ORM\ManyToOne(targetEntity: Language::class)]
+	#[ORM\JoinColumn(nullable: false)]
     private Language $language;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
+	#[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Vocable::class, mappedBy="session")
      * @var Collection<int, Vocable> $vocables
      */
+	#[ORM\OneToMany(targetEntity: Vocable::class, mappedBy: 'session')]
     private Collection $vocables;
 
 	public function __construct()
@@ -109,12 +99,7 @@ class LearningLanguage
 
     public function removeVocable(Vocable $vocable): self
     {
-        if ($this->vocables->removeElement($vocable)) {
-            // set the owning side to null (unless already changed)
-            if ($vocable->getLearningLanguage() === $this) {
-                $vocable->setLearningLanguage(null);
-            }
-        }
+        $this->vocables->removeElement($vocable);
 
         return $this;
     }

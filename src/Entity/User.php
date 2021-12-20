@@ -10,46 +10,41 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="`user`")
- * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
- */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: 'users')]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
+	#[ORM\Column(type: 'string', length: 180, unique: true)]
     private string $email;
 
     /**
-     * @ORM\Column(type="json")
+     * @var string[]
      */
+	#[ORM\Column(type: 'json')]
     private array $roles = [];
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
      */
+	#[ORM\Column(type: 'string')]
     private string $password;
 
     /**
-     * @ORM\OneToMany(targetEntity=Vocable::class, mappedBy="user", orphanRemoval=true)
      * @var Collection<int, Vocable> $vocables
      */
+	#[ORM\OneToMany(targetEntity: Vocable::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $vocables;
 
     /**
-     * @ORM\OneToMany(targetEntity=LearningLanguage::class, mappedBy="user", orphanRemoval=true)
      * @var Collection<int, LearningLanguage> $learningLanguages
      */
+	#[ORM\OneToMany(targetEntity: LearningLanguage::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $learningLanguages;
 
     public function __construct()
@@ -97,6 +92,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
+	/**
+	 * @param string[] $roles
+	 */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -122,7 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
@@ -148,12 +146,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeVocable(Vocable $vocable): self
     {
-        if ($this->vocables->removeElement($vocable)) {
-            // set the owning side to null (unless already changed)
-            if ($vocable->getUser() === $this) {
-                $vocable->setUser(null);
-            }
-        }
+        $this->vocables->removeElement($vocable);
 
         return $this;
     }
@@ -178,12 +171,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeLearningLanguage(LearningLanguage $learningSession): self
     {
-        if ($this->learningLanguages->removeElement($learningSession)) {
-            // set the owning side to null (unless already changed)
-            if ($learningSession->getUser() === $this) {
-                $learningSession->setUser(null);
-            }
-        }
+        $this->learningLanguages->removeElement($learningSession);
 
         return $this;
     }

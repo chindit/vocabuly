@@ -5,26 +5,18 @@ namespace App\Entity;
 use App\Repository\LanguageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=LanguageRepository::class)
- */
+#[ORM\Entity(repositoryClass: LanguageRepository::class)]
 class Language
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=3)
-     */
+	#[ORM\Column(type: 'string', length: 3)]
     private string $iso;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+	#[ORM\Column(type: 'string', length: 250)]
     private string $name;
 
     public function getId(): int
