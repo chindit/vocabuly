@@ -5,7 +5,9 @@ namespace App\Repository;
 use App\Entity\LearningLanguage;
 use App\Entity\User;
 use App\Entity\Vocable;
+use App\Enum\Direction;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -35,6 +37,35 @@ class VocableRepository extends ServiceEntityRepository
             ->setParameter('language', $language)
             ->getQuery()
             ->getScalarResult();
+    }
+
+    public function getVocableInRandomOrder(
+        User $user,
+        int $count,
+        LearningLanguage $language,
+        Direction $direction,
+        bool $unknown
+    ): Collection
+    {
+        $query = $this->createQueryBuilder('v')
+            ->where('v.user = :user')
+            ->andWhere('v.learningLanguage = :language');
+
+        if ($unknown) {
+            $query->andWhere(match ($direction) {
+                Direction::TranslateInbound => 'v.knowledgeIn < 1.0',
+                Direction::TranslateOutbound => 'v.knowledgeOut < 1.0',
+                Direction::TranslateBoth => 'v.knowledgeIn < 1.0 OR v.knowledgeOut < 1.0',
+            });
+        }
+
+        return $query
+            ->setParameter('user', $user)
+            ->setParameter('language', $language)
+            ->setMaxResults($count)
+            ->orderBy('RAND()')
+            ->getQuery()
+            ->getResult();
     }
 
     // /**
