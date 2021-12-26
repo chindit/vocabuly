@@ -47,9 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: LearningLanguage::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $learningLanguages;
 
-    /**
-     * @ORM\OneToMany(targetEntity=TestExercise::class, mappedBy="user", orphanRemoval=true)
-     */
+	#[ORM\OneToMany(targetEntity: TestExercise::class, mappedBy: 'user', orphanRemoval: true)]
     private $testExercises;
 
     public function __construct()

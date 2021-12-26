@@ -23,7 +23,7 @@ class IndexController extends AbstractController
     }
 
     #[Route('/my/dashboard', name: 'dashboard')]
-    public function dashboard(#[CurrentUser] User $user, VocableRepository $vocableRepository): Response
+    public function dashboard(#[CurrentUser]User $user, VocableRepository $vocableRepository): Response
     {
         if ($user->getLearningLanguages()->isEmpty()) {
             return $this->forward('App\\Controller\\LearningController::createLearning');

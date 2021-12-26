@@ -3,50 +3,47 @@
 namespace App\Entity;
 
 use App\Repository\TestExerciseRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=TestExerciseRepository::class)
- */
+#[ORM\Entity(repositoryClass: TestExerciseRepository::class)]
 class TestExercise
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[
+        ORM\Id,
+        ORM\GeneratedValue,
+        ORM\Column(type: 'integer')
+    ]
     private int $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="testExercises")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'testExercises')]
+    #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=LearningLanguage::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: LearningLanguage::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private LearningLanguage $learningLanguage;
 
-    /**
-     * @ORM\Column(type="smallint")
-     */
+    #[ORM\Column(type: 'smallint')]
     private int $vocablesCount = 0;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
+    #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private float $score = 0.0;
+
+    #[ORM\OneToMany(mappedBy: 'testExercise', targetEntity: TestVocable::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
+    private $vocables;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $completed = false;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->vocables = new ArrayCollection();
     }
 
     public function getId(): int
@@ -110,6 +107,48 @@ class TestExercise
     public function setScore(float $score): self
     {
         $this->score = $score;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TestVocable[]
+     */
+    public function getVocables(): Collection
+    {
+        return $this->vocables;
+    }
+
+    public function addVocable(TestVocable $vocable): self
+    {
+        if (!$this->vocables->contains($vocable)) {
+            $this->vocables[] = $vocable;
+            $vocable->setTestExercise($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVocable(TestVocable $vocable): self
+    {
+        if ($this->vocables->removeElement($vocable)) {
+            // set the owning side to null (unless already changed)
+            if ($vocable->getTestExercise() === $this) {
+                $vocable->setTestExercise(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCompleted(): ?bool
+    {
+        return $this->completed;
+    }
+
+    public function setCompleted(bool $completed): self
+    {
+        $this->completed = $completed;
 
         return $this;
     }

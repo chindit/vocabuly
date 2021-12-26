@@ -20,3 +20,6 @@ doctrine:
             numeric_functions:
                 rand: DoctrineExtensions\Query\Mysql\Rand
 
+doctrine_native_enums:
+    enum_types:
+        App\Enum\Direction: ~

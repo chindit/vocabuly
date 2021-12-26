@@ -2,132 +2,133 @@
 
 namespace App\Entity;
 
+use App\Enum\Direction;
 use App\Repository\TestVocableRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=TestVocableRepository::class)
- */
+#[ORM\Entity(repositoryClass: TestVocableRepository::class)]
 class TestVocable
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private int $id;
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
+	private int $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private User $user;
+	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'testExercises')]
+	#[ORM\JoinColumn(nullable: false)]
+	private User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Vocable::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private Vocable $vocable;
+	#[ORM\ManyToOne(targetEntity: Vocable::class)]
+	#[ORM\JoinColumn(nullable: false)]
+	private Vocable $vocable;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private string $answer = '';
+	#[ORM\Column(type: Direction::class)]
+	private Direction $direction;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private bool $success = false;
+	#[ORM\Column(type: 'string', length: 250)]
+	private string $answer = '';
 
-    /**
-     * @ORM\Column(type="smallint")
-     */
-    private int $direction = 0;
+	#[ORM\Column(type: 'boolean')]
+	private bool $success = false;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
-    private \DateTimeImmutable $createdAt;
+	#[ORM\Column(type: 'datetime_immutable')]
+	private \DateTimeImmutable $createdAt;
 
-    public function __construct()
-    {
-        $this->createdAt = new \DateTimeImmutable();
-    }
+	#[ORM\ManyToOne(targetEntity: TestExercise::class, inversedBy: 'vocables')]
+	#[ORM\JoinColumn(nullable: false)]
+	private $testExercise;
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
+	public function __construct()
+	{
+		$this->createdAt = new \DateTimeImmutable();
+	}
 
-    public function getUser(): User
-    {
-        return $this->user;
-    }
+	public function getId(): int
+	{
+		return $this->id;
+	}
 
-    public function setUser(User $user): self
-    {
-        $this->user = $user;
+	public function getUser(): User
+	{
+		return $this->user;
+	}
 
-        return $this;
-    }
+	public function setUser(User $user): self
+	{
+		$this->user = $user;
 
-    public function getVocable(): Vocable
-    {
-        return $this->vocable;
-    }
+		return $this;
+	}
 
-    public function setVocable(Vocable $vocable): self
-    {
-        $this->vocable = $vocable;
+	public function getVocable(): Vocable
+	{
+		return $this->vocable;
+	}
 
-        return $this;
-    }
+	public function setVocable(Vocable $vocable): self
+	{
+		$this->vocable = $vocable;
 
-    public function getAnswer(): string
-    {
-        return $this->answer;
-    }
+		return $this;
+	}
 
-    public function setAnswer(string $answer): self
-    {
-        $this->answer = $answer;
+	public function getAnswer(): string
+	{
+		return $this->answer;
+	}
 
-        return $this;
-    }
+	public function setAnswer(string $answer): self
+	{
+		$this->answer = $answer;
 
-    public function getSuccess(): bool
-    {
-        return $this->success;
-    }
+		return $this;
+	}
 
-    public function setSuccess(bool $success): self
-    {
-        $this->success = $success;
+	public function getSuccess(): bool
+	{
+		return $this->success;
+	}
 
-        return $this;
-    }
+	public function setSuccess(bool $success): self
+	{
+		$this->success = $success;
 
-    public function getDirection(): int
-    {
-        return $this->direction;
-    }
+		return $this;
+	}
 
-    public function setDirection(int $direction): self
-    {
-        $this->direction = $direction;
+	public function setDirection(Direction $direction): self
+	{
+		$this->direction = $direction;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getCreatedAt(): \DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
+	public function getDirection(): Direction
+	{
+		return $this->direction;
+	}
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
+	public function getCreatedAt(): \DateTimeImmutable
+	{
+		return $this->createdAt;
+	}
 
-        return $this;
-    }
+	public function setCreatedAt(\DateTimeImmutable $createdAt): self
+	{
+		$this->createdAt = $createdAt;
+
+		return $this;
+	}
+
+	public function getTestExercise(): ?TestExercise
+	{
+		return $this->testExercise;
+	}
+
+	public function setTestExercise(?TestExercise $testExercise): self
+	{
+		$this->testExercise = $testExercise;
+
+		return $this;
+	}
 }

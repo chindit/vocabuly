@@ -45,7 +45,7 @@ class VocableRepository extends ServiceEntityRepository
         LearningLanguage $language,
         Direction $direction,
         bool $unknown
-    ): Collection
+    ): array
     {
         $query = $this->createQueryBuilder('v')
             ->where('v.user = :user')
