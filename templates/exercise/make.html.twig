@@ -9,6 +9,7 @@
 			{{ message }}
 		</div>
 	{% endfor %}
+
 	{% form_theme form 'bootstrap_5_horizontal_layout.html.twig' %}
 	{{ form_start(form) }}
 	{% for vocable in form.vocables %}
@@ -21,7 +22,6 @@
 			</div>
 		</div>
 	{% endfor %}
-
 	{{ form_rest(form) }}
 	{{ form_end(form) }}
 {% endblock %}

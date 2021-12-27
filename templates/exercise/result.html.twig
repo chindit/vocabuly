@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello IndexController!{% endblock %}
+
+{% block body %}
+	<p><!--For margin--></p>
+	{% if exercise.score > 0.6 %}
+		<div class="alert alert-success" role="alert">Bravo !</div>
+	{% elseif exercise.score > 0.4 %}
+		<div class="alert alert-warning" role="alert">Pas mal, mais il reste du progrès</div>
+	{% else %}
+		<div class="alert alert-danger" role="alert">Aïe… Il reste du progrès à faire</div>
+	{% endif %}
+	<p>Tu as eu un score de {{ exercise.score*100 }}%</p>
+	<p>Voici tes réponses</p>
+
+<table class="table">
+	<thead>
+	<tr>
+		<th scope="col">Le Mot</th>
+		<th scope="col">Ta réponse</th>
+		<th scope="col">Traduction</th>
+		<th scope="col">Version</th>
+	</tr>
+	</thead>
+	<tbody>
+		{% for answer in exercise.vocables %}
+			<tr>
+				<td>{% if answer.direction.value == 0 %}{{ answer.vocable.original }}{% else %}{{ answer.vocable.translation }}{% endif %}</td>
+				<td class="alert alert-{% if answer.success %}success{% else %}danger{% endif %}">
+					{% if not answer.success %}
+					<span class="strike">{{ answer.answer }}</span>
+					<br>
+					{% endif %}
+					<span class="text-success">
+						{% if answer.direction.value == 0 %}{{ answer.vocable.translation }}{% else %}{{ answer.vocable.original }}{% endif %}
+					</span>
+				</td>
+				<td>{{ answer.vocable.knowledgeIn*100 }}%</td>
+				<td>{{ answer.vocable.knowledgeOut*100 }}%</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+	<p>
+		<a href="{{ url('create_exercise', {'id': exercise.learningLanguage.id}) }}" class="btn btn-primary" role="button">Refaire un test</a>
+	</p>
+{% endblock %}

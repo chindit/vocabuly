@@ -2,3 +2,6 @@
 	vertical-align: baseline;
 	width: 24px;
 }
+.strike {
+	text-decoration: line-through;
+}

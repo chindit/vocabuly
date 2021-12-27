@@ -36,15 +36,15 @@ class VocableService
         $test = new TestExercise();
         /** @var Vocable $vocable */
         foreach ($vocables as $vocable) {
-            if (Direction::TranslateBoth === $direction && $vocable->getKnowledgeIn() < $vocable->getKnowledgeOut()) {
-                $direction = Direction::TranslateInbound;
+            if (Direction::TranslateBoth === $direction && $vocable->getKnowledgeIn() <= $vocable->getKnowledgeOut()) {
+                $vocableDirection = Direction::TranslateInbound;
             } else {
-                $direction = Direction::TranslateOutbound;
+	            $vocableDirection = Direction::TranslateOutbound;
             }
             $test->addVocable((new TestVocable())
                 ->setVocable($vocable)
                 ->setUser($user)
-                ->setDirection($direction)
+                ->setDirection($vocableDirection)
             );
         }
         $test->setUser($user);
@@ -55,5 +55,38 @@ class VocableService
         $this->entityManager->flush();
 
         return $test;
+    }
+
+    public function checkExercise(TestExercise $exercise)
+    {
+		$score = 0;
+
+        foreach ($exercise->getVocables() as $vocable) {
+            $expected = match ($vocable->getDirection()) {
+                Direction::TranslateInbound => $vocable->getVocable()->getTranslation(),
+                Direction::TranslateOutbound => $vocable->getVocable()->getOriginal(),
+            };
+
+            if (strtolower(trim($expected)) === strtolower(trim($vocable->getAnswer()))) {
+                $vocable->setSuccess(true);
+				$score++;
+                if (Direction::TranslateInbound === $vocable->getDirection() && $vocable->getVocable()->getKnowledgeIn() < 1.0) {
+                    $vocable->getVocable()->setKnowledgeIn(min([1.0, $vocable->getVocable()->getKnowledgeIn() + 0.25]));
+                } elseif (Direction::TranslateOutbound === $vocable->getDirection() && $vocable->getVocable()->getKnowledgeOut() < 1.0) {
+                    $vocable->getVocable()->setKnowledgeOut(min([1.0, $vocable->getVocable()->getKnowledgeOut() + 0.25]));
+                }
+            } else {
+                $vocable->setSuccess(false);
+                if (Direction::TranslateInbound === $vocable->getDirection() && $vocable->getVocable()->getKnowledgeIn() > 0) {
+                    $vocable->getVocable()->setKnowledgeIn(max([0, $vocable->getVocable()->getKnowledgeIn() - 0.15]));
+                } elseif (Direction::TranslateOutbound === $vocable->getDirection() && $vocable->getVocable()->getKnowledgeOut() > 0) {
+                    $vocable->getVocable()->setKnowledgeOut(max([0, $vocable->getVocable()->getKnowledgeOut() - 0.15]));
+                }
+            }
+        };
+
+		$exercise->setScore($score/$exercise->getVocablesCount());
+
+        $this->entityManager->flush();
     }
 }

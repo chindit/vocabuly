@@ -19,7 +19,7 @@ class TestVocableType extends AbstractType
         $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
             /** @var TestVocable $entity */
             $entity = $event->getData();
-            $event->getForm()->get('vocable')->setData(Direction::TranslateInbound === $entity->getDirection() ? $entity->getVocable()->getTranslation() : $entity->getVocable()->getOriginal())
+            $event->getForm()->get('vocable')->setData(Direction::TranslateInbound === $entity->getDirection() ? $entity->getVocable()->getOriginal() : $entity->getVocable()->getTranslation())
             ;
         });
 

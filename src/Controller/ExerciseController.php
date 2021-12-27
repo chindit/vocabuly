@@ -21,45 +21,53 @@ class ExerciseController extends AbstractController
     #[Route('/my/exercise/create/{id}', name: 'create_exercise')]
     #[ParamConverter('learningLanguage', LearningLanguage::class, options: ['id' => 'id'])]
     public function index(
-	    LearningLanguage $learningLanguage,
-		#[CurrentUser] User $user,
-		Request $request,
-		VocableService $vocableService,
-		VocableRepository $repository
-    ): Response
-    {
+        LearningLanguage $learningLanguage,
+        #[CurrentUser] User $user,
+        Request $request,
+        VocableService $vocableService,
+        VocableRepository $repository
+    ): Response {
         $form = $this->createForm(ExerciseParameterType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-			$test = $vocableService->createTest(
-				$user,
-				$form->get('direction')->getData(),
-				(int)$form->get('count')->getData(),
-				(bool)$form->get('revision')->getData(),
-				$learningLanguage, $repository
-			);
+            $test = $vocableService->createTest(
+                $user,
+                $form->get('direction')->getData(),
+                (int)$form->get('count')->getData(),
+                (bool)$form->get('revision')->getData(),
+                $learningLanguage, $repository
+            );
 
-			if ($test !== null) {
-				return $this->forward('App\\Controller\\ExerciseController::makeExercise', [
-					'exercise' => $test
-				]);
-			}
+            if (null !== $test) {
+                return $this->redirect($this->generateUrl('make_exercise', ['id' => $test->getId()]));
+            }
         }
 
         return $this->render('exercise/create.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
-	#[Route('/my/exercise/{id}', name: 'make_exercise')]
-	public function makeExercise(TestExercise $exercise): Response
-	{
-		$form = $this->createForm(TestExerciseType::class, $exercise);
+    #[Route('/my/exercise/{id}', name: 'make_exercise')]
+    #[ParamConverter('exercise', TestExercise::class, options: ['id' => 'id'])]
+    public function makeExercise(TestExercise $exercise, Request $request, VocableService $vocableService): Response
+    {
+        $form = $this->createForm(TestExerciseType::class, $exercise);
 
-		return $this->render('exercise/make.html.twig', [
-			'form' => $form->createView()
-		]);
-	}
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $vocableService->checkExercise($exercise);
+
+            return $this->render('exercise/result.html.twig', [
+                'exercise' => $exercise,
+            ]);
+        }
+
+        return $this->render('exercise/make.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 }
