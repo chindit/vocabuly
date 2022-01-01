@@ -5,6 +5,9 @@
     "bentools/doctrine-native-enums": {
         "version": "0.1"
     },
+    "chindit/collection": {
+        "version": "1.0.7"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.4"
     },

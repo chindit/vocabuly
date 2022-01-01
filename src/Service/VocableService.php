@@ -11,6 +11,7 @@ use App\Entity\User;
 use App\Entity\Vocable;
 use App\Enum\Direction;
 use App\Repository\VocableRepository;
+use Chindit\Collection\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 
 class VocableService
@@ -39,7 +40,7 @@ class VocableService
             if (Direction::TranslateBoth === $direction && $vocable->getKnowledgeIn() <= $vocable->getKnowledgeOut()) {
                 $vocableDirection = Direction::TranslateInbound;
             } else {
-	            $vocableDirection = Direction::TranslateOutbound;
+                $vocableDirection = Direction::TranslateOutbound;
             }
             $test->addVocable((new TestVocable())
                 ->setVocable($vocable)
@@ -59,7 +60,7 @@ class VocableService
 
     public function checkExercise(TestExercise $exercise)
     {
-		$score = 0;
+        $score = 0;
 
         foreach ($exercise->getVocables() as $vocable) {
             $expected = match ($vocable->getDirection()) {
@@ -67,9 +68,9 @@ class VocableService
                 Direction::TranslateOutbound => $vocable->getVocable()->getOriginal(),
             };
 
-            if (strtolower(trim($expected)) === strtolower(trim($vocable->getAnswer()))) {
+            if ($this->matchAnswer($vocable->getAnswer(), $expected)) {
                 $vocable->setSuccess(true);
-				$score++;
+                ++$score;
                 if (Direction::TranslateInbound === $vocable->getDirection() && $vocable->getVocable()->getKnowledgeIn() < 1.0) {
                     $vocable->getVocable()->setKnowledgeIn(min([1.0, $vocable->getVocable()->getKnowledgeIn() + 0.25]));
                 } elseif (Direction::TranslateOutbound === $vocable->getDirection() && $vocable->getVocable()->getKnowledgeOut() < 1.0) {
@@ -83,10 +84,23 @@ class VocableService
                     $vocable->getVocable()->setKnowledgeOut(max([0, $vocable->getVocable()->getKnowledgeOut() - 0.15]));
                 }
             }
-        };
+        }
 
-		$exercise->setScore($score/$exercise->getVocablesCount());
+        $exercise->setScore($score / $exercise->getVocablesCount());
 
         $this->entityManager->flush();
+    }
+
+    private function matchAnswer(string $answer, string $expected): bool
+    {
+        if (!str_contains($expected, ',')) {
+            return strtolower(trim($expected)) === strtolower(trim($answer));
+        }
+
+        $answers = new Collection(explode(',', $expected));
+
+        return $answers
+            ->map(fn (string $element) => strtolower(trim($element)))
+            ->contains($answer);
     }
 }
