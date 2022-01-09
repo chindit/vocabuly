@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte{% endblock %}
+
+{% block body %}
+	<h1 class="text-center">Mon compte</h1>
+
+	<ul>
+		<li><a href="{{ url('list_vocables') }}">Voir mes mots</a></li>
+	</ul>
+{% endblock %}

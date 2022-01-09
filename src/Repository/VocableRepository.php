@@ -7,7 +7,6 @@ use App\Entity\User;
 use App\Entity\Vocable;
 use App\Enum\Direction;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -45,8 +44,7 @@ class VocableRepository extends ServiceEntityRepository
         LearningLanguage $language,
         Direction $direction,
         bool $unknown
-    ): array
-    {
+    ): array {
         $query = $this->createQueryBuilder('v')
             ->where('v.user = :user')
             ->andWhere('v.learningLanguage = :language');
@@ -64,6 +62,17 @@ class VocableRepository extends ServiceEntityRepository
             ->setParameter('language', $language)
             ->setMaxResults($count)
             ->orderBy('RAND()')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getPage(User $user, int $page): array
+    {
+        return $this->createQueryBuilder('v')
+            ->where('v.user = :user')
+            ->setParameter('user', $user)
+            ->setFirstResult(($page - 1) * 25)
+            ->setMaxResults(25)
             ->getQuery()
             ->getResult();
     }

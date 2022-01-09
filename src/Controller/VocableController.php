@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Vocable;
 use App\Form\VocableType;
+use App\Repository\VocableRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,5 +37,19 @@ class VocableController extends AbstractController
         }
 
         return $this->render('index/vocable.html.twig', ['form' => $vocableForm->createView()]);
+    }
+
+    #[Route('/my/vocable/list/{page}', name: 'list_vocables', defaults: ['page' => 1])]
+    public function listVocables(#[CurrentUser] User $user, VocableRepository $vocableRepository, int $page = 1): Response
+    {
+		$vocables = $vocableRepository->getPage($user, $page);
+		$total = ceil($vocableRepository->count(['user' => $user])/25);
+
+		return $this->render('index/listVocables.html.twig',
+		[
+			'vocables' => $vocables,
+			'pages' => $total,
+			'page' => $page
+		]);
     }
 }

@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<h1 class="pb-3">Mes mots</h1>
+	<table class="table table-striped table-hover">
+		<thead>
+		<tr>
+			<th scope="col">Original</th>
+			<th scope="col">Traduction</th>
+			<th scope="col">% de connaissance en traduction</th>
+			<th scope="col">% de connaissance en version</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for vocable in vocables %}
+			<tr>
+				<td>{{ vocable.original }}</td>
+				<td>{{ vocable.translation }}</td>
+				<td>{{ vocable.knowledgeIn*100|round(2) }}%</td>
+				<td>{{ vocable.knowledgeOut*100|round(2) }}%</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+	{# Pagination #}
+	<nav aria-label="pagination">
+		<ul class="pagination justify-content-center">
+			{% for i in range(1, pages) %}
+				<li class="page-item{% if page == i %} active{% endif %}"><a class="page-link" href="{{ url('list_vocables', {page: i}) }}">{{ i }}</a></li>
+			{% endfor %}
+		</ul>
+	</nav>
+{% endblock %}
