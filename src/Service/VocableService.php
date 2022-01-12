@@ -63,6 +63,9 @@ class VocableService
         $score = 0;
 
         foreach ($exercise->getVocables() as $vocable) {
+			if ($vocable->getDirection() === Direction::TranslateBoth) {
+				throw new \Exception('Vocable doesn\'t have clear direction');
+			}
             $expected = match ($vocable->getDirection()) {
                 Direction::TranslateInbound => $vocable->getVocable()->getTranslation(),
                 Direction::TranslateOutbound => $vocable->getVocable()->getOriginal(),

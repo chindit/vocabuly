@@ -200,12 +200,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeTestExercise(TestExercise $testExercise): self
     {
-        if ($this->testExercises->removeElement($testExercise)) {
-            // set the owning side to null (unless already changed)
-            if ($testExercise->getUser() === $this) {
-                $testExercise->setUser(null);
-            }
-        }
+        $this->testExercises->removeElement($testExercise);
 
         return $this;
     }
