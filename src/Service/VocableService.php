@@ -37,10 +37,10 @@ class VocableService
         $test = new TestExercise();
         /** @var Vocable $vocable */
         foreach ($vocables as $vocable) {
-            if (Direction::TranslateBoth === $direction && $vocable->getKnowledgeIn() <= $vocable->getKnowledgeOut()) {
-                $vocableDirection = Direction::TranslateInbound;
+            if (Direction::TranslateBoth === $direction) {
+                $vocableDirection = $vocable->getKnowledgeIn() <= $vocable->getKnowledgeOut() ? Direction::TranslateInbound : Direction::TranslateOutbound;
             } else {
-                $vocableDirection = Direction::TranslateOutbound;
+                $vocableDirection = $direction;
             }
             $test->addVocable((new TestVocable())
                 ->setVocable($vocable)
