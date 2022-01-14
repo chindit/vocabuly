@@ -29,7 +29,7 @@ class VocableRepository extends ServiceEntityRepository
     public function getStatistics(User $user, LearningLanguage $language): array
     {
         return $this->createQueryBuilder('v')
-            ->select('COUNT(v.id) AS count, AVG(v.knowledgeIn) AS knowledgeIn, AVG(v.knowledgeOut) AS knowledgeOut')
+            ->select('COUNT(v.id) AS count, ROUND(AVG(v.knowledgeIn), 2) AS knowledgeIn, ROUND(AVG(v.knowledgeOut), 2) AS knowledgeOut')
             ->where('v.user = :user')
             ->andWhere('v.learningLanguage = :language')
             ->setParameter('user', $user)
