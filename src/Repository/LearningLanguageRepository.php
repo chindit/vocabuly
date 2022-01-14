@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\LearningLanguage;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,6 +19,22 @@ class LearningLanguageRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, LearningLanguage::class);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getStatistics(User $user): array
+    {
+        return $this->createQueryBuilder('ll')
+            ->select('ll.id, l.name, l.iso,  COUNT(v.id) AS count, ROUND(AVG(v.knowledgeIn), 2) AS knowledgeIn, ROUND(AVG(v.knowledgeOut), 2) AS knowledgeOut')
+            ->leftJoin('ll.vocables', 'v', )
+            ->join('ll.language', 'l')
+            ->where('ll.user = :user')
+            ->setParameter('user', $user)
+            ->groupBy('ll.id')
+            ->getQuery()
+            ->getScalarResult();
     }
 
     // /**

@@ -4,18 +4,22 @@
 
 {% block body %}
     <h1 class="pb-3">Mon apprentissage</h1>
-    {% for session in sessions %}
-        <h3>J'apprends le <img class="valign-bottom" src="/img/flags/{{ session.language.iso }}.png" alt="{{ session.language.name }}" />&nbsp;{{ session.language.name }}</h3>
+    {% for stat in stats %}
+        <h3>J'apprends le <img class="valign-bottom" src="/img/flags/{{ stat.iso }}.png" alt="{{ stat.name }}" />&nbsp;{{ stat.name }}</h3>
+        <ul>
+            <li>J'ai {{ stat.count }} mots enregistrés</li>
+            <li>Je connais {{ stat.knowledgeIn*100 }}% des mots du {{ stat.name }} vers le français</li>
+            <li>Je connais {{ stat.knowledgeOut*100 }}% des mots du français vers le {{ stat.name }}</li>
+        </ul>
+        <p>
+            <a href="{{ url('add_vocable') }}" class="btn btn-info">Ajouter un nouveau mot</a>
+        </p>
+        <p>
+            <a href="{{ url('create_exercise', {'id': stat.id}) }}" class="btn btn-primary">Réviser mon vocabulaire</a>
+        </p>
     {% endfor %}
-    <ul>
-        <li>J'ai {{ stats.0.count }} mots enregistrés</li>
-        <li>Je connais {{ stats.0.knowledgeIn*100 }}% des mots du {{ sessions.first.language.name }} vers le français</li>
-        <li>Je connais {{ stats.0.knowledgeOut*100 }}% des mots du français vers le {{ sessions.first.language.name }}</li>
-    </ul>
+    <p></p>
     <p>
-        <a href="{{ url('add_vocable') }}" class="btn btn-info">Ajouter un nouveau mot</a>
-    </p>
-    <p>
-        <a href="{{ url('create_exercise', {'id': sessions.0.id}) }}" class="btn btn-primary">Réviser mon vocabulaire</a>
+        <a href="{{ url('learning_create') }}" class="btn btn-info">Apprendre une nouvelle langue</a>
     </p>
 {% endblock %}
