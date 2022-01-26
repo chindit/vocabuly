@@ -5,11 +5,11 @@
 {% block body %}
     <h1 class="pb-3">Mon apprentissage</h1>
     {% for stat in stats %}
-        <h3>J'apprends le <img class="valign-bottom" src="/img/flags/{{ stat.iso }}.png" alt="{{ stat.name }}" />&nbsp;{{ stat.name }}</h3>
+        <h3>J'apprends le <img class="valign-bottom" src="/img/flags/{{ stat.language.iso }}.png" alt="{{ stat.language.name }}" />&nbsp;{{ stat.language.name }}</h3>
         <ul>
             <li>J'ai {{ stat.count }} mots enregistrés</li>
-            <li>Je connais {{ stat.knowledgeIn*100 }}% des mots du {{ stat.name }} vers le français</li>
-            <li>Je connais {{ stat.knowledgeOut*100 }}% des mots du français vers le {{ stat.name }}</li>
+            <li>Je connais {{ stat.knowledgeIn*100 }}% des mots du {{ stat.language.name }} vers le français</li>
+            <li>Je connais {{ stat.knowledgeOut*100 }}% des mots du français vers le {{ stat.language.name }}</li>
         </ul>
         <p>
             <a href="{{ url('add_vocable') }}" class="btn btn-info">Ajouter un nouveau mot</a>
