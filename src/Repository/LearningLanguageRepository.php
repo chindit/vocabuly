@@ -32,6 +32,7 @@ class LearningLanguageRepository extends ServiceEntityRepository
             ->join('ll.language', 'l')
             ->where('ll.user = :user')
             ->setParameter('user', $user)
+            ->groupBy('ll.id', 'l.name', 'l.iso')
             ->getQuery()
             ->getScalarResult();
     }
