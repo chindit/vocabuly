@@ -29,6 +29,7 @@ class LearningLanguageRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('ll')
             ->select('ll.id, ll.language AS language, COUNT(v.id) AS count, ROUND(CAST(AVG(v.knowledgeIn) AS numeric), 2) AS knowledgeIn, ROUND(CAST(AVG(v.knowledgeOut) AS numeric), 2) AS knowledgeOut')
             ->leftJoin('ll.vocables', 'v')
+            ->innerJoin('ll.language', 'l')
             ->where('ll.user = :user')
             ->setParameter('user', $user)
             ->groupBy('ll.id')
