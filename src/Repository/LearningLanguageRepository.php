@@ -27,7 +27,7 @@ class LearningLanguageRepository extends ServiceEntityRepository
     public function getStatistics(User $user): array
     {
         return $this->createQueryBuilder('ll')
-            ->select('ll.id, l.name, l.iso,  COUNT(v.id) AS count, ROUND(AVG(v.knowledgeIn), 2) AS knowledgeIn, ROUND(AVG(v.knowledgeOut), 2) AS knowledgeOut')
+            ->select('ll.id, l.name, l.iso,  COUNT(v.id) AS count, ROUND(CAST(AVG(v.knowledgeIn) AS numeric), 2) AS knowledgeIn, ROUND(CAST(AVG(v.knowledgeOut) AS numeric), 2) AS knowledgeOut')
             ->leftJoin('ll.vocables', 'v', )
             ->join('ll.language', 'l')
             ->where('ll.user = :user')
