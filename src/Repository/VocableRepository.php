@@ -46,7 +46,7 @@ class VocableRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->setParameter('language', $language)
             ->setMaxResults($count)
-            ->orderBy('RAND()')
+            ->orderBy('RANDOM()')
             ->getQuery()
             ->getResult();
     }

@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Vocable;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,9 +14,13 @@ class VocableType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('original')
-            ->add('translation')
-            ->add('submit', SubmitType::class)
+            ->add('original', TextType::class)
+            ->add('translation', TextType::class, [
+				'label' => 'Traduction'
+            ])
+            ->add('submit', SubmitType::class, [
+				'label' => 'Ajouter'
+            ])
         ;
     }
 

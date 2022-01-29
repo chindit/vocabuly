@@ -17,10 +17,10 @@
 <table class="table">
 	<thead>
 	<tr>
-		<th scope="col">Le Mot</th>
+		<th scope="col">Question</th>
 		<th scope="col">Ta réponse</th>
-		<th scope="col">Traduction</th>
-		<th scope="col">Version</th>
+		<th scope="col">Connaissance du mot en traduction</th>
+		<th scope="col">Connaissance du mot en version</th>
 	</tr>
 	</thead>
 	<tbody>
@@ -36,8 +36,12 @@
 						{% if answer.direction.value == 0 %}{{ answer.vocable.translation }}{% else %}{{ answer.vocable.original }}{% endif %}
 					</span>
 				</td>
-				<td>{{ answer.vocable.knowledgeIn*100 }}%</td>
-				<td>{{ answer.vocable.knowledgeOut*100 }}%</td>
+				<td class="{% if answer.vocable.knowledgeIn < 0.2 %}text-danger{% elseif answer.vocable.knowledgeIn > 0.8 %}text-success{% else %}text-warning{% endif %}">
+					{{ answer.vocable.knowledgeIn*100 }}%
+				</td>
+				<td class="{% if answer.vocable.knowledgeOut < 0.2 %}text-danger{% elseif answer.vocable.knowledgeOut > 0.8 %}text-success{% else %}text-warning{% endif %}">
+					{{ answer.vocable.knowledgeOut*100 }}%
+				</td>
 			</tr>
 		{% endfor %}
 	</tbody>

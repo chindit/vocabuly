@@ -1,25 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello IndexController!{% endblock %}
+{% block title %}My Dashboard{% endblock %}
 
 {% block body %}
     <h1 class="pb-3">Mon apprentissage</h1>
     {% for stat in stats %}
+        <div class="mb-3">
         <h3>J'apprends le <img class="valign-bottom" src="/img/flags/{{ stat.iso }}.png" alt="{{ stat.name }}" />&nbsp;{{ stat.name }}</h3>
         <ul>
             <li>J'ai {{ stat.count }} mots enregistrés</li>
             <li>Je connais {{ stat.knowledgeIn*100 }}% des mots du {{ stat.name }} vers le français</li>
             <li>Je connais {{ stat.knowledgeOut*100 }}% des mots du français vers le {{ stat.name }}</li>
         </ul>
-        <p>
-            <a href="{{ url('add_vocable') }}" class="btn btn-info">Ajouter un nouveau mot</a>
-        </p>
-        <p>
-            <a href="{{ url('create_exercise', {'id': stat.id}) }}" class="btn btn-primary">Réviser mon vocabulaire</a>
-        </p>
+        <div>
+            <a href="{{ url('add_vocable') }}" class="btn btn-success"><i class="fas fa-plus"></i> Ajouter un nouveau mot</a>
+            <a href="{{ url('create_exercise', {'id': stat.id}) }}" class="btn btn-primary {% if stat.count < 5 %}disabled{% endif %}"><i class="fas fa-graduation-cap"></i> Réviser mon vocabulaire</a>
+        </div>
+        </div>
     {% endfor %}
-    <p></p>
-    <p>
-        <a href="{{ url('learning_create') }}" class="btn btn-info">Apprendre une nouvelle langue</a>
-    </p>
+    <div class="mt-5">
+        <a href="{{ url('learning_create') }}" class="btn btn-info"><i class="far fa-flag"></i> Apprendre une nouvelle langue</a>
+    </div>
 {% endblock %}

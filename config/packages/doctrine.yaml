@@ -19,7 +19,7 @@ doctrine:
         dql:
             numeric_functions:
                 cast: DoctrineExtensions\Query\Mysql\Cast
-                rand: DoctrineExtensions\Query\Mysql\Rand
+                random: DoctrineExtensions\Query\Sqlite\Random
                 round: DoctrineExtensions\Query\Mysql\Round
 
 doctrine_native_enums:

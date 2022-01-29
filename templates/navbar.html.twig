@@ -6,10 +6,12 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="{{ url('dashboard') }}">Home</a>
+                {% if is_granted('ROLE_USER') %}
+                <a class="nav-link active" aria-current="page" href="{{ url('dashboard') }}">Mes apprentissages</a>
                 <a class="nav-link" href="{{ url('my_profile') }}">Mon compte</a>
                 <!--<a class="nav-link" href="#">Pricing</a>
                 <a class="nav-link disabled">Disabled</a>-->
+                {% endif %}
             </div>
         </div>
         <div class="d-flex">
