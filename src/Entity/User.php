@@ -29,9 +29,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column(type: 'string')]
     private string $password;
 
@@ -47,8 +44,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: LearningLanguage::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $learningLanguages;
 
+    /** @var Collection<int, TestExercise> */
 	#[ORM\OneToMany(targetEntity: TestExercise::class, mappedBy: 'user', orphanRemoval: true)]
-    private $testExercises;
+    private Collection $testExercises;
 
     public function __construct()
     {
@@ -181,7 +179,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|TestExercise[]
+     * @return Collection<int, TestExercise>
      */
     public function getTestExercises(): Collection
     {

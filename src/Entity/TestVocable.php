@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Enum\Direction;
 use App\Repository\TestVocableRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TestVocableRepository::class)]
@@ -36,7 +37,7 @@ class TestVocable
 
 	#[ORM\ManyToOne(targetEntity: TestExercise::class, inversedBy: 'vocables')]
 	#[ORM\JoinColumn(nullable: false)]
-	private $testExercise;
+	private TestExercise $testExercise;
 
 	public function __construct()
 	{
@@ -127,12 +128,12 @@ class TestVocable
 		return $this;
 	}
 
-	public function getTestExercise(): ?TestExercise
+	public function getTestExercise(): TestExercise
 	{
 		return $this->testExercise;
 	}
 
-	public function setTestExercise(?TestExercise $testExercise): self
+	public function setTestExercise(TestExercise $testExercise): self
 	{
 		$this->testExercise = $testExercise;
 

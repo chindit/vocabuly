@@ -34,8 +34,9 @@ class TestExercise
     #[ORM\Column(type: 'float')]
     private float $score = 0.0;
 
+    /** @var Collection<int, TestVocable> */
     #[ORM\OneToMany(mappedBy: 'testExercise', targetEntity: TestVocable::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
-    private $vocables;
+    private Collection $vocables;
 
     #[ORM\Column(type: 'boolean')]
     private bool $completed = false;
@@ -112,7 +113,7 @@ class TestExercise
     }
 
     /**
-     * @return Collection|TestVocable[]
+     * @return Collection<int, TestVocable>
      */
     public function getVocables(): Collection
     {
@@ -131,12 +132,7 @@ class TestExercise
 
     public function removeVocable(TestVocable $vocable): self
     {
-        if ($this->vocables->removeElement($vocable)) {
-            // set the owning side to null (unless already changed)
-            if ($vocable->getTestExercise() === $this) {
-                $vocable->setTestExercise(null);
-            }
-        }
+        $this->vocables->removeElement($vocable);
 
         return $this;
     }

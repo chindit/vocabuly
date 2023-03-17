@@ -58,7 +58,7 @@ class VocableService
         return $test;
     }
 
-    public function checkExercise(TestExercise $exercise)
+    public function checkExercise(TestExercise $exercise): void
     {
         $score = 0;
 

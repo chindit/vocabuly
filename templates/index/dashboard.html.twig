@@ -13,7 +13,7 @@
             <li>Je connais {{ stat.knowledgeOut*100 }}% des mots du français vers le {{ stat.name }}</li>
         </ul>
         <div>
-            <a href="{{ url('add_vocable') }}" class="btn btn-success"><i class="fas fa-plus"></i> Ajouter un nouveau mot</a>
+            <a href="{{ url('add_vocable', {'learningLanguage': stat.id }) }}" class="btn btn-success"><i class="fas fa-plus"></i> Ajouter un nouveau mot</a>
             <a href="{{ url('create_exercise', {'id': stat.id}) }}" class="btn btn-primary {% if stat.count < 5 %}disabled{% endif %}"><i class="fas fa-graduation-cap"></i> Réviser mon vocabulaire</a>
         </div>
         </div>

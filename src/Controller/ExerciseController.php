@@ -5,11 +5,12 @@ namespace App\Controller;
 use App\Entity\LearningLanguage;
 use App\Entity\TestExercise;
 use App\Entity\User;
+use App\Enum\Direction;
 use App\Form\ExerciseParameterType;
 use App\Form\TestExerciseType;
 use App\Repository\VocableRepository;
 use App\Service\VocableService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,9 +20,8 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class ExerciseController extends AbstractController
 {
     #[Route('/my/exercise/create/{id}', name: 'create_exercise')]
-    #[ParamConverter('learningLanguage', LearningLanguage::class, options: ['id' => 'id'])]
     public function index(
-        LearningLanguage $learningLanguage,
+        #[MapEntity(mapping: ['learningLanguage'])] LearningLanguage $learningLanguage,
         #[CurrentUser] User $user,
         Request $request,
         VocableService $vocableService,
@@ -34,8 +34,8 @@ class ExerciseController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $test = $vocableService->createTest(
                 $user,
-                $form->get('direction')->getData(),
-                (int)$form->get('count')->getData(),
+                Direction::from(strval($form->get('direction')->getData())),
+                intval($form->get('count')->getData()),
                 (bool)$form->get('revision')->getData(),
                 $learningLanguage, $repository
             );
@@ -51,8 +51,11 @@ class ExerciseController extends AbstractController
     }
 
     #[Route('/my/exercise/{id}', name: 'make_exercise')]
-    #[ParamConverter('exercise', TestExercise::class, options: ['id' => 'id'])]
-    public function makeExercise(TestExercise $exercise, Request $request, VocableService $vocableService): Response
+    public function makeExercise(
+        #[MapEntity]TestExercise $exercise,
+        Request $request,
+        VocableService $vocableService
+    ): Response
     {
         $form = $this->createForm(TestExerciseType::class, $exercise);
 

@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\Vocable;
 use App\Enum\Direction;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -23,6 +24,7 @@ class VocableRepository extends ServiceEntityRepository
         parent::__construct($registry, Vocable::class);
     }
 
+    /** @return array<int, Vocable> */
     public function getVocableInRandomOrder(
         User $user,
         int $count,
@@ -42,15 +44,19 @@ class VocableRepository extends ServiceEntityRepository
             });
         }
 
-        return $query
+        /** @var list<Vocable> $result */
+        $result = $query
             ->setParameter('user', $user)
             ->setParameter('language', $language)
             ->setMaxResults($count)
             ->orderBy('RANDOM()')
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
+    /** @return array<int, Vocable> */
     public function getPage(User $user, int $page): array
     {
         return $this->createQueryBuilder('v')
