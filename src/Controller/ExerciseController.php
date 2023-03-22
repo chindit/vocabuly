@@ -32,9 +32,11 @@ class ExerciseController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Direction $direction */
+            $direction = $form->get('direction')->getData();
             $test = $vocableService->createTest(
                 $user,
-                Direction::from(strval($form->get('direction')->getData())),
+                $direction,
                 intval($form->get('count')->getData()),
                 (bool)$form->get('revision')->getData(),
                 $learningLanguage, $repository
