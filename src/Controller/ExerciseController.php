@@ -21,7 +21,7 @@ class ExerciseController extends AbstractController
 {
     #[Route('/my/exercise/create/{id}', name: 'create_exercise')]
     public function index(
-        #[MapEntity(mapping: ['learningLanguage' => 'id'])] LearningLanguage $learningLanguage,
+        #[MapEntity(mapping: ['id' => 'id'])] LearningLanguage $learningLanguage,
         #[CurrentUser] User $user,
         Request $request,
         VocableService $vocableService,
